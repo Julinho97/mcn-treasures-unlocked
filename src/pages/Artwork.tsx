@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,13 +7,15 @@ import {
   ArrowLeft, 
   Share2, 
   QrCode, 
-  Camera, 
-  FileDown,
-  Calendar,
+  Box, 
+  Download,
   MapPin,
   Info
 } from "lucide-react";
+import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
+import ARViewer from "@/components/ARViewer";
+import { generateArtworkPDF } from "@/utils/pdfGenerator";
 import artwork1 from "@/assets/artwork-1.jpg";
 import artwork2 from "@/assets/artwork-2.jpg";
 import artwork3 from "@/assets/artwork-3.jpg";
@@ -65,7 +68,44 @@ const artworksData: Record<string, any> = {
 const Artwork = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [arViewerOpen, setArViewerOpen] = useState(false);
   const artwork = artworksData[id || "1"];
+
+  const handleShare = async () => {
+    const shareData = {
+      title: `${artwork.title} - MCN`,
+      text: `Découvrez "${artwork.title}" au Musée des Civilisations Noires`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast.success("Partagé avec succès !");
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          toast.error("Erreur lors du partage");
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Lien copié dans le presse-papier !");
+    }
+  };
+
+  const handleDownloadPDF = () => {
+    const technicalDetails = `Matériaux: ${artwork.details.materials}\nDimensions: ${artwork.details.dimensions}\nAcquisition: ${artwork.details.acquisition}`;
+    generateArtworkPDF({
+      id: artwork.id,
+      title: artwork.title,
+      period: artwork.period,
+      origin: artwork.origin,
+      description: artwork.description,
+      technicalDetails,
+      audioDuration: artwork.duration,
+    });
+    toast.success("PDF téléchargé !");
+  };
 
   if (!artwork) {
     return (
@@ -96,7 +136,7 @@ const Artwork = () => {
               Retour
             </Button>
             <h2 className="text-lg font-bold hidden md:block">MCN-XP</h2>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={handleShare}>
               <Share2 className="w-4 h-4" />
             </Button>
           </div>
@@ -126,12 +166,20 @@ const Artwork = () => {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="gap-2">
-                  <Camera className="w-4 h-4" />
+                <Button 
+                  variant="outline" 
+                  className="gap-2"
+                  onClick={() => setArViewerOpen(true)}
+                >
+                  <Box className="w-4 h-4" />
                   Vue AR
                 </Button>
-                <Button variant="outline" className="gap-2">
-                  <FileDown className="w-4 h-4" />
+                <Button 
+                  variant="outline" 
+                  className="gap-2"
+                  onClick={handleDownloadPDF}
+                >
+                  <Download className="w-4 h-4" />
                   PDF
                 </Button>
               </div>
@@ -194,15 +242,26 @@ const Artwork = () => {
                     Invitez vos amis à explorer cette œuvre fascinante
                   </p>
                 </div>
-                <Button variant="hero" size="lg" className="gap-2">
+                <Button 
+                  variant="hero" 
+                  size="lg" 
+                  className="gap-2"
+                  onClick={handleShare}
+                >
                   <Share2 className="w-5 h-5" />
-                  Partager sur WhatsApp
+                  Partager
                 </Button>
               </div>
             </CardContent>
           </Card>
         </div>
       </main>
+
+      <ARViewer 
+        open={arViewerOpen} 
+        onOpenChange={setArViewerOpen}
+        artworkTitle={artwork.title}
+      />
     </div>
   );
 };
