@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { QrCode, Headphones, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-museum.jpg";
+import QRScanner from "./QRScanner";
 
 const Hero = () => {
+  const [scannerOpen, setScannerOpen] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -41,6 +44,7 @@ const Hero = () => {
               variant="hero" 
               size="lg"
               className="gap-3"
+              onClick={() => setScannerOpen(true)}
             >
               <QrCode className="w-5 h-5" />
               Scanner une œuvre
@@ -49,11 +53,16 @@ const Hero = () => {
               variant="outline" 
               size="lg"
               className="gap-3"
+              onClick={() => {
+                document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               <Headphones className="w-5 h-5" />
               Voir la galerie
             </Button>
           </div>
+
+          <QRScanner open={scannerOpen} onOpenChange={setScannerOpen} />
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">

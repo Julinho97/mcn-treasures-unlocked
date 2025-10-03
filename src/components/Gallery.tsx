@@ -29,7 +29,7 @@ const artworks = [
 
 const Gallery = () => {
   return (
-    <section className="py-20 px-6">
+    <section id="gallery" className="py-20 px-6">
       <div className="container">
         {/* Header */}
         <div className="text-center space-y-4 mb-16">

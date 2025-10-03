@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Play, Share2, QrCode } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ArtworkCardProps {
   id: string;
@@ -12,11 +13,20 @@ interface ArtworkCardProps {
   onClick?: () => void;
 }
 
-const ArtworkCard = ({ title, period, duration, imageUrl, onClick }: ArtworkCardProps) => {
+const ArtworkCard = ({ id, title, period, duration, imageUrl, onClick }: ArtworkCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/artwork/${id}`);
+    }
+  };
   return (
     <Card 
       className="group overflow-hidden cursor-pointer transition-smooth hover:shadow-glow"
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="relative aspect-square overflow-hidden">
         <img
