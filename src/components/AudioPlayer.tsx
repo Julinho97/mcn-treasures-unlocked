@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Download, Volume2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import WaveSurfer from "wavesurfer.js";
 
 interface AudioPlayerProps {
   audioUrl?: string;
@@ -9,13 +10,78 @@ interface AudioPlayerProps {
 }
 
 const AudioPlayer = ({ audioUrl, title }: AudioPlayerProps) => {
+  const waveformRef = useRef<HTMLDivElement>(null);
+  const wavesurferRef = useRef<WaveSurfer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(272); // 4:32 demo duration
+  const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(80);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (!waveformRef.current) return;
+
+    // Demo audio URL (replace with actual audioUrl prop when available)
+    const demoAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    
+    const wavesurfer = WaveSurfer.create({
+      container: waveformRef.current,
+      waveColor: "hsl(var(--primary) / 0.3)",
+      progressColor: "hsl(var(--primary))",
+      cursorColor: "hsl(var(--secondary))",
+      barWidth: 3,
+      barRadius: 3,
+      cursorWidth: 2,
+      height: 80,
+      barGap: 2,
+    });
+
+    wavesurfer.load(audioUrl || demoAudioUrl);
+
+    wavesurfer.on("ready", () => {
+      setDuration(wavesurfer.getDuration());
+      setIsReady(true);
+      wavesurfer.setVolume(volume / 100);
+    });
+
+    wavesurfer.on("audioprocess", () => {
+      setCurrentTime(wavesurfer.getCurrentTime());
+    });
+
+    wavesurfer.on("interaction", () => {
+      setCurrentTime(wavesurfer.getCurrentTime());
+    });
+
+    wavesurfer.on("finish", () => {
+      setIsPlaying(false);
+    });
+
+    wavesurferRef.current = wavesurfer;
+
+    return () => {
+      wavesurfer.destroy();
+    };
+  }, [audioUrl]);
+
+  useEffect(() => {
+    if (wavesurferRef.current) {
+      wavesurferRef.current.setVolume(volume / 100);
+    }
+  }, [volume]);
 
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    if (wavesurferRef.current) {
+      wavesurferRef.current.playPause();
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleSeek = (value: number[]) => {
+    if (wavesurferRef.current) {
+      const time = value[0];
+      wavesurferRef.current.seekTo(time / duration);
+      setCurrentTime(time);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -34,27 +100,17 @@ const AudioPlayer = ({ audioUrl, title }: AudioPlayerProps) => {
         </Button>
       </div>
 
-      {/* Waveform Visualization (Demo) */}
-      <div className="rounded-lg overflow-hidden bg-card/50 h-20 flex items-end gap-1 p-2">
-        {Array.from({ length: 60 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex-1 bg-gradient-to-t from-primary to-secondary rounded-full transition-all"
-            style={{
-              height: `${20 + Math.random() * 60}%`,
-              opacity: i < (currentTime / duration) * 60 ? 1 : 0.3,
-            }}
-          />
-        ))}
-      </div>
+      {/* Waveform Visualization */}
+      <div ref={waveformRef} className="rounded-lg overflow-hidden" />
 
       {/* Progress Bar */}
       <Slider
         value={[currentTime]}
-        onValueChange={(value) => setCurrentTime(value[0])}
-        max={duration}
-        step={1}
+        onValueChange={handleSeek}
+        max={duration || 100}
+        step={0.1}
         className="cursor-pointer"
+        disabled={!isReady}
       />
 
       {/* Time Display */}
@@ -71,6 +127,7 @@ const AudioPlayer = ({ audioUrl, title }: AudioPlayerProps) => {
           size="lg"
           onClick={togglePlayPause}
           className="w-16 h-16 rounded-full"
+          disabled={!isReady}
         >
           {isPlaying ? (
             <Pause className="w-6 h-6" />
