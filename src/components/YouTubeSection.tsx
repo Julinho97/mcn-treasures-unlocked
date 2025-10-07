@@ -140,7 +140,7 @@ const YouTubeSection = () => {
                 <Button
                   size="lg"
                   className="gap-2 bg-red-600 hover:bg-red-700 text-white"
-                  onClick={() => window.open('https://www.youtube.com/@museedescivilisationsnoires', '_blank')}
+                  onClick={() => window.open('https://www.youtube.com/', '_blank')}
                 >
                   <Play className="w-5 h-5" />
                   S'abonner sur YouTube
