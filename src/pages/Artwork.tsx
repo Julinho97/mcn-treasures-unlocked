@@ -129,19 +129,24 @@ const Artwork = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/98 backdrop-blur-xl shadow-soft">
         <div className="container px-6 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between stagger-1">
             <Button 
               variant="ghost" 
               onClick={() => navigate("/")}
-              className="gap-2"
+              className="gap-2 hover:scale-105 transition-transform"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour
             </Button>
             <h2 className="text-lg font-bold hidden md:block">MCN-XP</h2>
-            <Button variant="ghost" size="icon" onClick={handleShare}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={handleShare}
+              className="hover:scale-105 transition-transform"
+            >
               <Share2 className="w-4 h-4" />
             </Button>
           </div>
@@ -149,20 +154,21 @@ const Artwork = () => {
       </header>
 
       {/* Content */}
-      <main className="container px-6 py-12">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <main className="container px-6 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Image */}
-            <div className="space-y-6">
-              <div className="relative aspect-square rounded-2xl overflow-hidden shadow-glow">
+            <div className="space-y-6 stagger-2">
+              <div className="relative aspect-square rounded-3xl overflow-hidden shadow-glow group">
                 <img
                   src={artwork.imageUrl}
                   alt={artwork.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute top-4 right-4">
-                  <Badge variant="secondary" className="shadow-soft">
+                  <Badge variant="secondary" className="shadow-soft backdrop-blur-sm">
                     <QrCode className="w-3 h-3 mr-1" />
                     QR #{artwork.id}
                   </Badge>
@@ -173,7 +179,7 @@ const Artwork = () => {
               <div className="grid grid-cols-2 gap-4">
                 <Button 
                   variant="outline" 
-                  className="gap-2"
+                  className="gap-2 hover:scale-105 hover:border-primary/50 transition-all duration-300"
                   onClick={() => setArViewerOpen(true)}
                 >
                   <Box className="w-4 h-4" />
@@ -181,7 +187,7 @@ const Artwork = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="gap-2"
+                  className="gap-2 hover:scale-105 hover:border-primary/50 transition-all duration-300"
                   onClick={handleDownloadPDF}
                 >
                   <Download className="w-4 h-4" />
@@ -191,42 +197,46 @@ const Artwork = () => {
             </div>
 
             {/* Info */}
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Badge variant="secondary">{artwork.period}</Badge>
-                  <Badge variant="outline" className="gap-1">
-                    <MapPin className="w-3 h-3" />
+            <div className="space-y-8 stagger-3">
+              <div className="space-y-6">
+                <div className="flex flex-wrap items-start gap-3">
+                  <Badge variant="secondary" className="text-sm px-4 py-1.5">
+                    {artwork.period}
+                  </Badge>
+                  <Badge variant="outline" className="gap-1.5 text-sm px-4 py-1.5">
+                    <MapPin className="w-3.5 h-3.5" />
                     {artwork.origin}
                   </Badge>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
                   {artwork.title}
                 </h1>
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                   {artwork.description}
                 </p>
               </div>
 
               {/* Details Card */}
-              <Card className="border-2">
-                <CardContent className="p-6 space-y-4">
+              <Card className="border-2 hover:border-primary/20 transition-all duration-300 hover-lift">
+                <CardContent className="p-8 space-y-6">
                   <div className="flex items-center gap-2 text-sm font-semibold text-primary">
-                    <Info className="w-4 h-4" />
+                    <Info className="w-5 h-5" />
                     Détails techniques
                   </div>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Matériaux</span>
-                      <span className="font-medium">{artwork.details.materials}</span>
+                  <div className="space-y-4 text-sm">
+                    <div className="flex justify-between items-start gap-4">
+                      <span className="text-muted-foreground font-medium">Matériaux</span>
+                      <span className="font-semibold text-right">{artwork.details.materials}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Dimensions</span>
-                      <span className="font-medium">{artwork.details.dimensions}</span>
+                    <div className="h-px bg-border" />
+                    <div className="flex justify-between items-start gap-4">
+                      <span className="text-muted-foreground font-medium">Dimensions</span>
+                      <span className="font-semibold text-right">{artwork.details.dimensions}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Acquisition</span>
-                      <span className="font-medium">{artwork.details.acquisition}</span>
+                    <div className="h-px bg-border" />
+                    <div className="flex justify-between items-start gap-4">
+                      <span className="text-muted-foreground font-medium">Acquisition</span>
+                      <span className="font-semibold text-right">{artwork.details.acquisition}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -235,17 +245,26 @@ const Artwork = () => {
           </div>
 
           {/* Audio Player */}
-          <AudioPlayer title={artwork.title} />
+          <div className="scroll-reveal">
+            <AudioPlayer title={artwork.title} />
+          </div>
 
           {/* Video Player */}
-          <VideoPlayer 
-            title={artwork.title}
-            poster={artwork.imageUrl}
-          />
+          <div className="scroll-reveal">
+            <VideoPlayer 
+              title={artwork.title}
+              poster={artwork.imageUrl}
+            />
+          </div>
 
           {/* QR Code Section */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">QR Code de l'œuvre</h2>
+          <div className="space-y-6 scroll-reveal">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl md:text-4xl font-bold">QR Code de l'œuvre</h2>
+              <p className="text-muted-foreground">
+                Partagez cet accès direct à l'œuvre
+              </p>
+            </div>
             <QRCodeDisplay
               value={window.location.href}
               title={artwork.title}
@@ -254,27 +273,29 @@ const Artwork = () => {
           </div>
 
           {/* Share Section */}
-          <Card className="border-2 gradient-subtle">
-            <CardContent className="p-8">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="space-y-2 text-center md:text-left">
-                  <h3 className="text-2xl font-bold">Partagez votre découverte</h3>
-                  <p className="text-muted-foreground">
-                    Invitez vos amis à explorer cette œuvre fascinante
-                  </p>
+          <div className="scroll-reveal">
+            <Card className="border-2 gradient-subtle overflow-hidden hover-lift">
+              <CardContent className="p-10 md:p-12">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                  <div className="space-y-3 text-center md:text-left">
+                    <h3 className="text-3xl md:text-4xl font-bold">Partagez votre découverte</h3>
+                    <p className="text-lg text-muted-foreground">
+                      Invitez vos amis à explorer cette œuvre fascinante
+                    </p>
+                  </div>
+                  <Button 
+                    variant="hero" 
+                    size="lg" 
+                    className="gap-2 shadow-glow hover:scale-110 transition-all duration-300 text-lg px-8 py-6"
+                    onClick={handleShare}
+                  >
+                    <Share2 className="w-5 h-5" />
+                    Partager
+                  </Button>
                 </div>
-                <Button 
-                  variant="hero" 
-                  size="lg" 
-                  className="gap-2"
-                  onClick={handleShare}
-                >
-                  <Share2 className="w-5 h-5" />
-                  Partager
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
 

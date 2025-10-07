@@ -29,22 +29,28 @@ const artworks = [
 
 const Gallery = () => {
   return (
-    <section id="gallery" className="py-20 px-6">
+    <section id="gallery" className="py-24 px-6">
       <div className="container">
         {/* Header */}
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="text-center space-y-4 mb-16 scroll-reveal">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
             Collection en Vedette
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Explorez nos œuvres les plus emblématiques avec des guides audio immersifs
           </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {artworks.map((artwork) => (
-            <ArtworkCard key={artwork.id} {...artwork} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+          {artworks.map((artwork, index) => (
+            <div 
+              key={artwork.id} 
+              className="scroll-reveal"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <ArtworkCard {...artwork} />
+            </div>
           ))}
         </div>
       </div>

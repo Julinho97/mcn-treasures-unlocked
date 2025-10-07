@@ -36,37 +36,42 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-20 px-6 gradient-subtle">
+    <section className="py-24 px-6 gradient-subtle">
       <div className="container">
         {/* Header */}
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="text-center space-y-4 mb-16 scroll-reveal">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
             Une Expérience Révolutionnaire
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             MCN-XP repousse les limites de l'exploration culturelle numérique
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card 
+              <div 
                 key={index}
-                className="border-0 shadow-soft transition-smooth hover:shadow-glow hover:-translate-y-1"
+                className="scroll-reveal"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <CardContent className="p-8 space-y-4">
-                  <div className="w-14 h-14 rounded-2xl gradient-hero flex items-center justify-center shadow-soft">
-                    <Icon className="w-7 h-7 text-primary-foreground" />
-                  </div>
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
+                <Card 
+                  className="border-0 shadow-soft hover-lift h-full bg-card/50 backdrop-blur-sm"
+                >
+                  <CardContent className="p-8 space-y-4">
+                    <div className="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center shadow-soft">
+                      <Icon className="w-8 h-8 text-primary-foreground" />
+                    </div>
+                    <h3 className="text-xl font-bold">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>
