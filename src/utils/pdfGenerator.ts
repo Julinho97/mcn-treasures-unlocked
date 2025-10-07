@@ -76,12 +76,14 @@ export const generateArtworkPDF = (artwork: ArtworkData) => {
   pdf.setFontSize(9);
   pdf.text('Généré par MCN-XP • mcn.sn', 105, 285, { align: 'center' });
   
-  // QR Code placeholder
+  // QR Code info
   pdf.setDrawColor(primaryColor);
   pdf.setLineWidth(2);
   pdf.rect(165, 240, 30, 30);
   pdf.setFontSize(8);
-  pdf.text('QR', 180, 257, { align: 'center' });
+  pdf.setTextColor(100, 100, 100);
+  pdf.text('Scannez le QR', 180, 273, { align: 'center' });
+  pdf.text('sur la page web', 180, 278, { align: 'center' });
   
   // Save
   pdf.save(`MCN-${artwork.id}-${artwork.title.replace(/\s+/g, '-')}.pdf`);

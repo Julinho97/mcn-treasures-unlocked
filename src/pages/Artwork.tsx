@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
 import VideoPlayer from "@/components/VideoPlayer";
 import ARViewer from "@/components/ARViewer";
+import QRCodeDisplay from "@/components/QRCodeDisplay";
 import { generateArtworkPDF } from "@/utils/pdfGenerator";
 import artwork1 from "@/assets/artwork-1.jpg";
 import artwork2 from "@/assets/artwork-2.jpg";
@@ -241,6 +242,16 @@ const Artwork = () => {
             title={artwork.title}
             poster={artwork.imageUrl}
           />
+
+          {/* QR Code Section */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">QR Code de l'œuvre</h2>
+            <QRCodeDisplay
+              value={window.location.href}
+              title={artwork.title}
+              size={200}
+            />
+          </div>
 
           {/* Share Section */}
           <Card className="border-2 gradient-subtle">
