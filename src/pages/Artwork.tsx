@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
+import VideoPlayer from "@/components/VideoPlayer";
 import ARViewer from "@/components/ARViewer";
 import { generateArtworkPDF } from "@/utils/pdfGenerator";
 import artwork1 from "@/assets/artwork-1.jpg";
@@ -27,6 +28,7 @@ const artworksData: Record<string, any> = {
     period: "XIXe siècle",
     origin: "Mali",
     duration: "4:32",
+    videoDuration: "8:45",
     imageUrl: artwork1,
     description: "Ce masque cérémoniel exceptionnel témoigne de l'art sophistiqué du peuple Dogon. Utilisé lors des cérémonies du Dama, il représente un lien sacré entre le monde des vivants et celui des ancêtres.",
     details: {
@@ -41,6 +43,7 @@ const artworksData: Record<string, any> = {
     period: "XVIIIe siècle",
     origin: "Ghana",
     duration: "5:18",
+    videoDuration: "7:22",
     imageUrl: artwork2,
     description: "Le Kente est un textile royal tissé à la main, symbole de richesse et de prestige dans la culture Ashanti. Chaque motif et couleur porte une signification spécifique transmise de génération en génération.",
     details: {
@@ -55,6 +58,7 @@ const artworksData: Record<string, any> = {
     period: "500 av. J.-C.",
     origin: "Nigeria",
     duration: "3:45",
+    videoDuration: "6:30",
     imageUrl: artwork3,
     description: "Cette poterie appartient à la culture Nok, l'une des plus anciennes civilisations d'Afrique subsaharienne. Elle révèle un niveau de maîtrise technique remarquable pour son époque.",
     details: {
@@ -231,6 +235,12 @@ const Artwork = () => {
 
           {/* Audio Player */}
           <AudioPlayer title={artwork.title} />
+
+          {/* Video Player */}
+          <VideoPlayer 
+            title={artwork.title}
+            poster={artwork.imageUrl}
+          />
 
           {/* Share Section */}
           <Card className="border-2 gradient-subtle">
