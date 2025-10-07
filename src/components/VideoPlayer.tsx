@@ -21,6 +21,7 @@ const VideoPlayer = ({ videoUrl, title, poster }: VideoPlayerProps) => {
 
   // Demo video URL (Sintel - Open source Blender movie)
   const demoVideoUrl = videoUrl || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
+  // const demoVideoUrl = videoUrl || "@/assets/videos/le-musée-des-civilisations-noires--découvrez-lhéritage-africain-à-dakar.mp4";
 
   const togglePlayPause = () => {
     if (videoRef.current) {

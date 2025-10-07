@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, Download, Volume2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import WaveSurfer from "wavesurfer.js";
+import audioSource from "@/assets/mp3/son.m4a";
+// import audioSource from "@/assets/mp3/son.mp3";
 
 interface AudioPlayerProps {
   audioUrl?: string;
@@ -21,8 +23,8 @@ const AudioPlayer = ({ audioUrl, title }: AudioPlayerProps) => {
   useEffect(() => {
     if (!waveformRef.current) return;
 
-    // Demo audio URL (replace with actual audioUrl prop when available)
-    const demoAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    // Audio local du musée
+    const localAudioUrl = audioUrl || audioSource;
     
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
@@ -36,7 +38,7 @@ const AudioPlayer = ({ audioUrl, title }: AudioPlayerProps) => {
       barGap: 2,
     });
 
-    wavesurfer.load(audioUrl || demoAudioUrl);
+    wavesurfer.load(localAudioUrl);
 
     wavesurfer.on("ready", () => {
       setDuration(wavesurfer.getDuration());
