@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Play, Share2, QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import OptimizedImage from "./OptimizedImage";
 
 interface ArtworkCardProps {
   id: string;
@@ -10,10 +11,12 @@ interface ArtworkCardProps {
   period: string;
   duration: string;
   imageUrl: string;
+  origin?: string;
+  category?: string;
   onClick?: () => void;
 }
 
-const ArtworkCard = ({ id, title, period, duration, imageUrl, onClick }: ArtworkCardProps) => {
+const ArtworkCard = ({ id, title, period, duration, imageUrl, origin, category, onClick }: ArtworkCardProps) => {
   const navigate = useNavigate();
   
   const handleClick = () => {
@@ -29,10 +32,11 @@ const ArtworkCard = ({ id, title, period, duration, imageUrl, onClick }: Artwork
       onClick={handleClick}
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
-        <img
+        <OptimizedImage
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
+          className="transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
         
@@ -57,7 +61,20 @@ const ArtworkCard = ({ id, title, period, duration, imageUrl, onClick }: Artwork
           <h3 className="text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
             {title}
           </h3>
-          <p className="text-sm text-muted-foreground">{period}</p>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <p className="text-muted-foreground">{period}</p>
+            {origin && (
+              <>
+                <span className="text-muted-foreground">•</span>
+                <p className="text-muted-foreground">{origin}</p>
+              </>
+            )}
+          </div>
+          {category && (
+            <Badge variant="outline" className="text-xs">
+              {category}
+            </Badge>
+          )}
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-border/50">

@@ -74,7 +74,7 @@ export const generateArtworkPDF = (artwork: ArtworkData) => {
   // Footer
   pdf.setTextColor(100, 100, 100);
   pdf.setFontSize(9);
-  pdf.text('Généré par MCN-XP • mcn.sn', 105, 285, { align: 'center' });
+  pdf.text('Généré par MCN-221 • mcn.sn', 105, 285, { align: 'center' });
   
   // QR Code info
   pdf.setDrawColor(primaryColor);

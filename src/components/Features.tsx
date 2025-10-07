@@ -44,7 +44,7 @@ const Features = () => {
             Une Expérience Révolutionnaire
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            MCN-XP repousse les limites de l'exploration culturelle numérique
+            MCN-221 repousse les limites de l'exploration culturelle numérique
           </p>
         </div>
 

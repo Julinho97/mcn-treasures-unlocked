@@ -6,15 +6,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Artwork from "./pages/Artwork";
 import NotFound from "./pages/NotFound";
+import SmoothScroll from "./components/SmoothScroll";
+import FloatingScanButton from "./components/FloatingScanButton";
+import SimpleFloatingButton from "./components/SimpleFloatingButton";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <SmoothScroll />
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <SimpleFloatingButton />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/artwork/:id" element={<Artwork />} />
